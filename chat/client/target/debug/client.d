@@ -1,0 +1,1 @@
+C:\Users\narek\Downloads\Rust_client-server_chat-master\Rust_client-server_chat-master\chat\client\target\debug\client.exe: C:\Users\narek\Downloads\Rust_client-server_chat-master\Rust_client-server_chat-master\chat\client\src\main.rs
