@@ -19,6 +19,7 @@ fn main() {
     loop {
         if let Ok((mut socket, addr)) = server.accept() {
             println!("Client {} connected", addr);
+            println!("[i] Vous etes {} !\n", clients.len()+1);
 
             let tx = tx.clone();
             clients.push(socket.try_clone().expect("failed to clone client"));
@@ -28,6 +29,7 @@ fn main() {
 
                 match socket.read_exact(&mut buff) {
                     Ok(_) => {
+
                         let msg = buff.into_iter().take_while(|&x| x != 0).collect::<Vec<_>>();
                         let msg = String::from_utf8(msg).expect("Invalid utf8 message");
 
