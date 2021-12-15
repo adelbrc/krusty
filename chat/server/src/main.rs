@@ -18,11 +18,14 @@ fn main() {
     let (tx, rx) = mpsc::channel::<String>();
     loop {
         if let Ok((mut socket, addr)) = server.accept() {
-            println!("Client {} connected", addr);
-            println!("[i] Vous etes {} !\n", clients.len()+1);
-
+            
             let tx = tx.clone();
             clients.push(socket.try_clone().expect("failed to clone client"));
+
+            // on envoie le nb de users connected
+            tx.send(format!("[+] Vous etes {} utilisateur(s) !\n", clients.len())).expect("failed to send msg to rx");
+            
+            println!("Un nouvel utilisateur s'est connecte {}", addr);
 
             thread::spawn(move || loop {
                 let mut buff = vec![0; MSG_SIZE];
