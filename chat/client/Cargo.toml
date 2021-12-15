@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["ESGI-4SI2-Narek-Adel-Paul"]
 
 [dependencies]
+colored = "2.0.0"

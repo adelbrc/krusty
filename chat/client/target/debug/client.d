@@ -1,1 +1,1 @@
-C:\Users\narek\Downloads\Rust_client-server_chat-master\Rust_client-server_chat-master\chat\client\target\debug\client.exe: C:\Users\narek\Downloads\Rust_client-server_chat-master\Rust_client-server_chat-master\chat\client\src\main.rs
+C:\Users\pjbn1\Documents\GitHub\krusty\chat\client\target\debug\client.exe: C:\Users\pjbn1\Documents\GitHub\krusty\chat\client\src\main.rs
