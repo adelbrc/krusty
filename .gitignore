@@ -1,2 +1,4 @@
 chat/client/target/*
 chat/server/target/*
+chat/tcp_client/target/*
+chat/tcp_server/target/*

@@ -1,0 +1,8 @@
+[package]
+name = "server"
+version = "0.1.0"
+authors = ["ESGI-4SI2-Narek-Adel-Paul"]
+edition = "2021"
+
+[dependencies]
+simpletcp = "1.2.1"
