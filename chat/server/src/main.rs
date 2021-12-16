@@ -4,7 +4,7 @@ use std::sync::mpsc;
 use std::thread;
 
 const LOCAL: &str = "127.0.0.1:6000";
-const MSG_SIZE: usize = 32;
+const MSG_SIZE: usize = 512;
 
 fn sleep() {
     thread::sleep(::std::time::Duration::from_millis(100));
@@ -18,13 +18,13 @@ fn main() {
     let (tx, rx) = mpsc::channel::<String>();
     loop {
         if let Ok((mut socket, addr)) = server.accept() {
-            
+
             let tx = tx.clone();
             clients.push(socket.try_clone().expect("failed to clone client"));
 
             // on envoie le nb de users connected
             tx.send(format!("[+] Vous etes {} utilisateur(s) !\n", clients.len())).expect("failed to send msg to rx");
-            
+
             println!("Un nouvel utilisateur s'est connecte {}", addr);
 
             thread::spawn(move || loop {
@@ -38,7 +38,7 @@ fn main() {
 
                         println!("{}: {:?}", addr, msg);
                         tx.send(msg).expect("failed to send msg to rx");
-                    }, 
+                    },
                     Err(ref err) if err.kind() == ErrorKind::WouldBlock => (),
                     Err(_) => {
                         println!("closing connection with: {}", addr);

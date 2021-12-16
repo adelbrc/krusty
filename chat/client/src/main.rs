@@ -2,7 +2,8 @@ use std::io::{self, ErrorKind, Read, Write};
 use std::net::TcpStream;
 use std::sync::mpsc::{self, TryRecvError};
 use std::thread;
-use std::time::Duration;
+use std::time::{Duration};
+use chrono::{DateTime, Utc};
 
 // substrint
 extern crate substring;
@@ -14,10 +15,10 @@ use colored::*;
 
 
 const LOCAL: &str = "127.0.0.1:6000";
-const MSG_SIZE: usize = 32;
+const MSG_SIZE: usize = 512;
 
 fn main() {
-	// on demande le nickname 
+	// on demande le nickname
 	println!("{}", "\n\nWelcome ! Pick a nickname:".on_truecolor(80, 112, 255));
 	let mut pre_nickname = String::new();
 	io::stdin().read_line(&mut pre_nickname).expect("reading from stdin failed");
@@ -26,11 +27,11 @@ fn main() {
 
 	let mut client = TcpStream::connect(LOCAL).expect("Stream failed to connect");
 	client.set_nonblocking(true).expect("failed to initiate non-blocking");
-	
+
 	let (tx, rx) = mpsc::channel::<String>();
-	
+
 	// on envoie le message de notre arrivée
-	tx.send(format!("[i] {} a rejoint le tchat", nickname)).expect("hello error");
+	tx.send(format!("[i] {} has joined the chat", nickname)).expect("hello error");
 
 	thread::spawn(move || loop {
 		let mut buff = vec![0; MSG_SIZE];
@@ -57,7 +58,7 @@ fn main() {
 				buff.resize(MSG_SIZE, 0);
 				client.write_all(&buff).expect("writing to socket failed");
 				// println!("message sent {:?}", msg);
-			}, 
+			},
 			Err(TryRecvError::Empty) => (),
 			Err(TryRecvError::Disconnected) => break
 		}
@@ -66,16 +67,16 @@ fn main() {
 	});
 
 
-	println!("{}", "\n\nCommencez a discuter... (taper :bye pour quitter)".red());
+	println!("{}", "\n\nStart chatting... (type :bye to quit)".red());
 	// print!("{esc}c", esc = 27 as char);
 	loop {
 		let mut buff = String::new();
 		io::stdin().read_line(&mut buff).expect("reading from stdin failed");
 		let msg = buff.trim().to_string();
-		
+		let now: DateTime<Utc> = Utc::now();
 		// dont send empty messages
 		if msg.chars().count() != 0 {
-			if msg == ":bye" || tx.send(format!("{}: {}", nickname.red().bold(), msg)).is_err() {break}
+			if msg == ":bye" || tx.send(format!("{} - {}: {}", now, nickname.red().bold(), msg)).is_err() {break}
 		}
 	}
 	println!("{}", "[i] Disconnecting...\n".green());
